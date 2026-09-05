@@ -1,0 +1,64 @@
+[project]
+name = "anchor"
+version = "0.9.75"
+description = "Quality-anchor LLM router, 15 workers configured / single product"
+license = { text = "MIT" }
+requires-python = ">=3.11"
+dependencies = [
+    "numpy>=1.26",
+    "fastapi>=0.115",
+    "uvicorn>=0.30",
+    "httpx>=0.27",
+    "pydantic>=2.7",
+    "aiosqlite>=0.20",
+    "prometheus-client>=0.20",
+    "openai>=1.50",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0", "pytest-asyncio>=0.23", "httpx2>=2.9", "openai>=1.50"]
+redis = ["redis>=5.0"]
+
+[project.scripts]
+anchor = "anchor.cli:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/anchor"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+# audit 2026-08-16 (G): archived probe tests (tests/_archive_legacy) reference
+# removed workers/scripts; stop collecting them.
+addopts = "--ignore=tests/_archive_legacy"
+markers = [
+    "anchor_e2e: live end-to-end tests that require a running Anchor gateway",
+    "live_aimax: live self-check probes against the aimax farm ollama endpoint (opt-in via ANCHOR_LIVE_AIMAX=1 or -m live_aimax)",
+]
+
+[tool.ruff.lint.per-file-ignores]
+# E402 — structural imports: try-import for optional deps / late import to
+# break circular dependencies (documented at each site in the code).
+"src/anchor/*" = ["E402"]
+# E702/F841/E701 in tests — compact one-liner data rows + capture variables
+# that deliberately keep the underlying call (side effects) without binding
+# the result. audit 2026-08-16: src F841/F811/F821/E701 are all fixed; these
+# remaining ignores are test-style only.
+"tests/*" = ["E402", "E702", "F841", "E701"]
+# Compact data-table rows in the phase scripts / redis emulation layer.
+"src/anchor/run_phase3.py" = ["E702"]
+"src/anchor/_fake_redis.py" = ["E702"]
+
+[tool.mypy]
+python_version = "3.11"
+ignore_missing_imports = true
+no_strict_optional = true
+warn_unused_ignores = false
+# Phase 3 L-03: baseline (non-blocking). Strict mode can be enabled
+# incrementally per-module via # mypy: strict in source files.
+files = ["src/anchor"]
+exclude = ["src/anchor/release/", "src/anchor/utils/"]

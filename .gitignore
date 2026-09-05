@@ -1,0 +1,50 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# --- Virtualenvs ---
+.venv/
+venv/
+ENV/
+env/
+
+# --- Test / coverage artifacts ---
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+.coverage
+
+# --- Lint / type caches ---
+.ruff_cache/
+.mypy_cache/
+
+# --- Build / dist ---
+build/
+dist/
+*.egg-info/
+*.egg
+pip-wheel-metadata/
+
+# --- IDE / editor ---
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# --- Runtime / data ---
+data/
+.env
+.env.*
+!.env.example
+*.log
+logs/
+
+# --- Benchmarks ---
+.benchmarks/
