@@ -2,7 +2,7 @@
 name = "anchor"
 version = "0.9.75"
 description = "Quality-anchor LLM router, 15 workers configured / single product"
-license = { text = "MIT" }
+license = { text = "Apache-2.0" }
 requires-python = ">=3.11"
 dependencies = [
     "numpy>=1.26",

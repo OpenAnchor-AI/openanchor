@@ -2,7 +2,7 @@
 
 Quality-anchor LLM router, 15 workers configured / single product. Inspired by Sakana Fugu
 (arXiv:2606.21228), TRINITY (arXiv:2512.04695), and Conductor (arXiv:2512.04388).
-Licensed under MIT (see LICENSE).
+Licensed under Apache-2.0 (see LICENSE).
 
 Quick start::
 
