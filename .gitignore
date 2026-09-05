@@ -1,50 +1,98 @@
-# --- Python ---
+# Python
 __pycache__/
 *.py[cod]
 *$py.class
 *.so
 .Python
-
-# --- Virtualenvs ---
-.venv/
-venv/
-ENV/
-env/
-
-# --- Test / coverage artifacts ---
-.pytest_cache/
-.coverage
-.coverage.*
-htmlcov/
-.tox/
-.nox/
-.coverage
-
-# --- Lint / type caches ---
-.ruff_cache/
-.mypy_cache/
-
-# --- Build / dist ---
-build/
-dist/
 *.egg-info/
 *.egg
-pip-wheel-metadata/
+.eggs/
+build/
+dist/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
 
-# --- IDE / editor ---
-.idea/
-.vscode/
-*.swp
-*.swo
-.DS_Store
+# Virtual env
+.venv/
+venv/
+env/
 
-# --- Runtime / data ---
-data/
+# Fusio artifacts (large)
+artifacts/*.npy
+artifacts/Qwen3-0.6B/
+artifacts/heads/*.npy
+data/oracle/*.jsonl
+data/sessions/*.jsonl
+data/routerarena/
+data/calibration/*.json
+# auto-generated phase2 replay report (matches evals/phase2_report.json)
+evals/phase2_report.json
+
+# Secrets (NEVER commit)
 .env
 .env.*
-!.env.example
+keys.env
+*.pem
+secrets/
+
+# Root-level stray sqlite leftover (real DB lives in data/anchor.db)
+anchor.db
+
+# Anchor gateway auth tokens (sk-anchor-*). Local-only file kept on
+# developer machines during the 2026-07-21 rotation; tokens are now
+# loaded from ANCHOR_API_KEYS env var exclusively (see anchor.secrets).
+# The file is intentionally NOT removed from disk -- per the rotation
+# procedure, any operator who relied on it must regenerate real tokens
+# and migrate them into their deployment's env-var store.
+data/api_keys.json
+
+# Logs
 *.log
 logs/
 
-# --- Benchmarks ---
-.benchmarks/
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Research (use git submodule or separate repo)
+research/openfugu/
+research/fugu/
+research/routerarena/
+__pycache__/*
+data/anchor.db
+data/key_quota.db
+data/sacred_spend.db
+# SQLite WAL mode sibling files (auto-created alongside *.db when journal_mode=WAL)
+data/*.db-shm
+data/*.db-wal
+
+# Anchor session log (Day 17, append-only JSONL mirror)
+data/anchor_sessions/
+
+backups/
+data/anchor_sessions/
+data/circuit_breaker.json
+data/head_baseline.json
+
+# Agent / IDE session noise (do not commit)
+.claude/
+.omc/
+
+# audit 2026-08-16: pi-subagent reviewer artifacts (transcripts embed prompts + code)
+.pi-subagents/
+
+# Local probe artifacts (session-specific)
+data/probe_m3_ab_*.json
+
+# runtime usage
+data/usage_log.jsonl
+.pre-commit-cache/
