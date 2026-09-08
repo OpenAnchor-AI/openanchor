@@ -18,6 +18,14 @@ def _build_parser() -> argparse.ArgumentParser:
     sub.add_parser("config", help="print and validate worker configuration")
     sub.add_parser("smoke", help="run the end-to-end smoke test")
 
+    # T-04: 5-min onboarding wizard + diagnostic.
+    # Imported lazily so `anchor serve` startup stays fast (the wizard
+    # pulls in the worker registry for grouping; doctor imports the same).
+    from anchor.cli_init import add_init_subparser
+    from anchor.cli_doctor import add_doctor_subparser
+    add_init_subparser(sub)
+    add_doctor_subparser(sub)
+
     cron = sub.add_parser("cron", help="run cron management commands")
     cron.add_argument("args", nargs=argparse.REMAINDER)
     return parser
@@ -44,6 +52,12 @@ def main(argv: list[str] | None = None) -> int:
     if args.command == "smoke":
         from anchor.smoke import main as smoke_main
         return smoke_main()
+    if args.command == "init":
+        from anchor.cli_init import IO, init_command
+        return init_command(args, IO())
+    if args.command == "doctor":
+        from anchor.cli_doctor import doctor_command
+        return doctor_command(args)
     if args.command == "cron":
         from anchor.cron import main as cron_main
         old_argv = sys.argv
